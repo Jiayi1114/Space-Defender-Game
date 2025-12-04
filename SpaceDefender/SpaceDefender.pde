@@ -1,4 +1,9 @@
-float playerX, playerY;
+// ============================================
+// Space Defender Game
+// Author: [Jiayi Liu]
+// GitHub: https://github.com/ilsy11114/Space-Defender-Game
+// Course: Object Oriented Game Programming
+// ============================================float playerX, playerY;
 float playerSize = 30;
 ArrayList<PVector> enemies;
 ArrayList<PVector> bullets;
