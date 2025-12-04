@@ -1,4 +1,3 @@
-// 主程序文件
 float playerX, playerY;
 float playerSize = 30;
 ArrayList<PVector> enemies;
@@ -6,7 +5,7 @@ ArrayList<PVector> bullets;
 ArrayList<PVector> stars;
 int score = 0;
 int lives = 3;
-int gameState = 0; // 0=菜单, 1=游戏中, 2=游戏结束
+int gameState = 0; // 0=menu, 1=playing, 2=ending
 
 void setup() {
   size(800, 600);
@@ -16,7 +15,7 @@ void setup() {
   bullets = new ArrayList<PVector>();
   stars = new ArrayList<PVector>();
   
-  // 创建星星
+  // creat star
   for (int i = 0; i < 100; i++) {
     stars.add(new PVector(random(width), random(height), random(1, 3)));
   }
@@ -25,7 +24,7 @@ void setup() {
 void draw() {
   background(0);
   
-  // 绘制星星
+  // draw star
   for (PVector star : stars) {
     fill(200);
     ellipse(star.x, star.y, star.z, star.z);
@@ -42,7 +41,7 @@ void draw() {
 }
 
 void drawMenu() {
-  // 开始按钮
+  // star button
   fill(0, 255, 100, 150);
   ellipse(width/2, 350, 80, 80);
   fill(0, 200, 80);
@@ -50,16 +49,16 @@ void drawMenu() {
 }
 
 void updateGame() {
-  // 更新玩家位置
+  // update player position
   playerX = mouseX;
   playerX = constrain(playerX, playerSize, width - playerSize);
   
-  // 生成敌人
+  // enemy
   if (frameCount % 60 == 0) {
     enemies.add(new PVector(random(50, width-50), -30));
   }
   
-  // 更新子弹
+  // update bullet
   for (int i = bullets.size()-1; i >= 0; i--) {
     PVector b = bullets.get(i);
     b.y -= 8;
@@ -68,12 +67,12 @@ void updateGame() {
     }
   }
   
-  // 更新敌人
+  // update enemy
   for (int i = enemies.size()-1; i >= 0; i--) {
     PVector e = enemies.get(i);
     e.y += 2;
     
-    // 检测子弹碰撞
+    // check bullet collision
     for (int j = bullets.size()-1; j >= 0; j--) {
       PVector b = bullets.get(j);
       if (dist(e.x, e.y, b.x, b.y) < 25) {
@@ -84,7 +83,7 @@ void updateGame() {
       }
     }
     
-    // 检测玩家碰撞
+    // check player collision
     if (dist(e.x, e.y, playerX, playerY) < 30) {
       enemies.remove(i);
       lives--;
@@ -93,7 +92,7 @@ void updateGame() {
       }
     }
     
-    // 移除超出屏幕的敌人
+    // remove enemy outside screen
     if (e.y > height + 50) {
       enemies.remove(i);
     }
@@ -101,25 +100,25 @@ void updateGame() {
 }
 
 void drawGame() {
-  // 绘制玩家
+  // draw player
   fill(100, 150, 255);
   triangle(playerX - playerSize, playerY + playerSize/2, 
            playerX, playerY - playerSize, 
            playerX + playerSize, playerY + playerSize/2);
   
-  // 绘制敌人
+  // draw enemy
   fill(255, 50, 50);
   for (PVector e : enemies) {
     ellipse(e.x, e.y, 25, 25);
   }
   
-  // 绘制子弹
+  // draw bullet
   fill(255, 255, 0);
   for (PVector b : bullets) {
     rect(b.x-2, b.y-10, 4, 15);
   }
   
-  // 显示生命值
+  // life
   for (int i = 0; i < lives; i++) {
     drawHeart(30 + i * 40, 30);
   }
@@ -147,7 +146,7 @@ void mousePressed() {
   } else if (gameState == 1) {
     bullets.add(new PVector(playerX, playerY - 40));
   } else if (gameState == 2 && dist(mouseX, mouseY, width/2, height/2 + 150) < 40) {
-    // 重新开始
+    // restart
     enemies.clear();
     bullets.clear();
     score = 0;
